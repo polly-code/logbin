@@ -1,4 +1,4 @@
-def logplot (data_x, data_y, err_y=None, numdots=20):
+def logplot (data_x, data_y, err_y=None, numdots=20, ptf='Deafault path'):
     '''replot data from linear space to logspace with evenly distributed dots.
     data_x, data_y - arrays of x,y
     err_y - y error
@@ -26,7 +26,8 @@ def logplot (data_x, data_y, err_y=None, numdots=20):
             newdata_x.append(distr[i])
     if err_y is None:
         plt.loglog(newdata_x, newdata_y,'ro')
-        f1=open('D://logplot//msd_0log','w')
+        plt.savefig(ptf+'.png', dpi=300)
+        f1=open(ptf+'log','w')
         for i in range(len(newdata_y)):
             f1.write('%f\t%f\n'%(newdata_x[i],newdata_y[i]))
     else:
@@ -34,15 +35,15 @@ def logplot (data_x, data_y, err_y=None, numdots=20):
         ax.set_yscale('log')
         ax.set_xscale('log')
         plt.errorbar(newdata_x,newdata_y,yerr=newdata_err_y, fmt='--bo')
-        plt.savefig('D://logplot//rn1.png', dpi=300)
-        f1=open('D://logplot//rn1log','w')
+        plt.savefig(ptf+'.png', dpi=300)
+        f1=open(ptf+'log','w')
         for i in range(len(newdata_y)):
             f1.write('%f\t%f\t%f\n'%(newdata_x[i],newdata_y[i],newdata_err_y[i]))
     f1.close()
     
-#End of function
+# Main
     
-path = 'D://logplot//rn1.dat'
+path = 'enter your path'
 f=open(path)
 x=[]
 y=[]
@@ -53,9 +54,10 @@ for line in f:
         if init:
             init=False
             continue
-        a,b,err=line.split()
+        a,b=line.split() #change to a,b,err=line.split() in case of std
         x.append(float(a))
         y.append(float(b))
-        yr.append(float(err))
+        #yr.append(float(err))
 f.close()
-logplot(x,y,err_y=yr)
+#logplot(x,y,err_y=yr, ptf=path)
+logplot(x,y,ptf=path)
